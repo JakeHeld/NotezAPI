@@ -35,11 +35,6 @@ namespace NotezAPI.Data
             userRoleBuilder.HasOne(x => x.User)
                 .WithMany(x => x.Roles)
                 .HasForeignKey(x => x.UserId);
-
-            /*var lectureBuilder = builder.Entity<Lecture>();
-            lectureBuilder.HasOne(x => x.Lecturer)
-                .WithMany(x => x.Lecture)
-                .HasForeignKey(x => x.LecturerId);*/
         }
     }
 }
