@@ -16,8 +16,7 @@ namespace NotezAPI.Data
 
         }
         
-        public DbSet<MainIdea> MainIdeas { get; set; }
-        public DbSet<Summary> Summaries { get; set; }
+        public DbSet<Note> Notes { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -35,11 +34,6 @@ namespace NotezAPI.Data
             userRoleBuilder.HasOne(x => x.User)
                 .WithMany(x => x.Roles)
                 .HasForeignKey(x => x.UserId);
-
-            /*var lectureBuilder = builder.Entity<Lecture>();
-            lectureBuilder.HasOne(x => x.Lecturer)
-                .WithMany(x => x.Lecture)
-                .HasForeignKey(x => x.LecturerId);*/
         }
     }
 }
