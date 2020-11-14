@@ -1,4 +1,4 @@
-﻿namespace NotezAPI.Data.Entities
+﻿namespace NotezAPI.Data.Entities.Role
 {
     internal static class Roles
     {

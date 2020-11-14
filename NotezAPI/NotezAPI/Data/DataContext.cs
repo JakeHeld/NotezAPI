@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NotezAPI.Data.Entities;
+using NotezAPI.Data.Entities.Note;
+using NotezAPI.Data.Entities.Lecture;
+using NotezAPI.Data.Entities.Role;
+using NotezAPI.Data.Entities.Shared;
+using NotezAPI.Data.Entities.User;
 
 namespace NotezAPI.Data
 {
@@ -11,9 +15,11 @@ namespace NotezAPI.Data
         {
 
         }
-
         
-
+        public DbSet<MainIdea> MainIdeas { get; set; }
+        public DbSet<Summary> Summaries { get; set; }
+        public DbSet<Lecture> Lectures { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -29,6 +35,11 @@ namespace NotezAPI.Data
             userRoleBuilder.HasOne(x => x.User)
                 .WithMany(x => x.Roles)
                 .HasForeignKey(x => x.UserId);
+
+            /*var lectureBuilder = builder.Entity<Lecture>();
+            lectureBuilder.HasOne(x => x.Lecturer)
+                .WithMany(x => x.Lecture)
+                .HasForeignKey(x => x.LecturerId);*/
         }
     }
 }

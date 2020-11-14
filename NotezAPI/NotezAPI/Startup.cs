@@ -15,6 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NotezAPI.Data;
 using NotezAPI.Data.Entities;
+using NotezAPI.Data.Entities.Role;
+using NotezAPI.Data.Entities.User;
 
 namespace NotezAPI
 {

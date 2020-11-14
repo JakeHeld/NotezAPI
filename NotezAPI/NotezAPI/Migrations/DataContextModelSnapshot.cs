@@ -19,6 +19,21 @@ namespace NotezAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
+            modelBuilder.Entity("LectureUser", b =>
+                {
+                    b.Property<Guid>("LecturesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LecturesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("LectureUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -105,7 +120,87 @@ namespace NotezAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.Role", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.Lecture.Lecture", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MeetingUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Topic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lectures");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.Note.MainIdea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("LectureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectureId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MainIdeas");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.Note.Summary", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("LectureId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("LectureId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LectureId1");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Summaries");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.Role.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,7 +229,22 @@ namespace NotezAPI.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.User", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.Shared.UserRole", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.User.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -201,24 +311,24 @@ namespace NotezAPI.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.UserRole", b =>
+            modelBuilder.Entity("LectureUser", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.HasOne("NotezAPI.Data.Entities.Lecture.Lecture", null)
+                        .WithMany()
+                        .HasForeignKey("LecturesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
+                    b.HasOne("NotezAPI.Data.Entities.User.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("NotezAPI.Data.Entities.Role", null)
+                    b.HasOne("NotezAPI.Data.Entities.Role.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -227,7 +337,7 @@ namespace NotezAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("NotezAPI.Data.Entities.User", null)
+                    b.HasOne("NotezAPI.Data.Entities.User.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -236,7 +346,7 @@ namespace NotezAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("NotezAPI.Data.Entities.User", null)
+                    b.HasOne("NotezAPI.Data.Entities.User.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -245,22 +355,54 @@ namespace NotezAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("NotezAPI.Data.Entities.User", null)
+                    b.HasOne("NotezAPI.Data.Entities.User.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.UserRole", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.Note.MainIdea", b =>
                 {
-                    b.HasOne("NotezAPI.Data.Entities.Role", "Role")
+                    b.HasOne("NotezAPI.Data.Entities.Lecture.Lecture", null)
+                        .WithMany("MainIdeas")
+                        .HasForeignKey("LectureId");
+
+                    b.HasOne("NotezAPI.Data.Entities.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.Note.Summary", b =>
+                {
+                    b.HasOne("NotezAPI.Data.Entities.Lecture.Lecture", "Lecture")
+                        .WithMany("Summaries")
+                        .HasForeignKey("LectureId1");
+
+                    b.HasOne("NotezAPI.Data.Entities.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lecture");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.Shared.UserRole", b =>
+                {
+                    b.HasOne("NotezAPI.Data.Entities.Role.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotezAPI.Data.Entities.User", "User")
+                    b.HasOne("NotezAPI.Data.Entities.User.User", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,12 +413,19 @@ namespace NotezAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.Role", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.Lecture.Lecture", b =>
+                {
+                    b.Navigation("MainIdeas");
+
+                    b.Navigation("Summaries");
+                });
+
+            modelBuilder.Entity("NotezAPI.Data.Entities.Role.Role", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.User", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.User.User", b =>
                 {
                     b.Navigation("Roles");
                 });

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using NotezAPI.Data.Entities.Shared;
 
-namespace NotezAPI.Data.Entities
+namespace NotezAPI.Data.Entities.Role
 {
     public class Role : IdentityRole<int>
     {
