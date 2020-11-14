@@ -194,58 +194,31 @@ namespace NotezAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MainIdeas",
+                name: "Notes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NoteContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MainIdeas", x => x.Id);
+                    table.PrimaryKey("PK_Notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MainIdeas_AspNetUsers_UserId",
+                        name: "FK_Notes_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MainIdeas_Lectures_LectureId",
+                        name: "FK_Notes_Lectures_LectureId",
                         column: x => x.LectureId,
                         principalTable: "Lectures",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Summaries",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    LectureId = table.Column<int>(type: "int", nullable: false),
-                    LectureId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Summaries", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Summaries_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Summaries_Lectures_LectureId1",
-                        column: x => x.LectureId1,
-                        principalTable: "Lectures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -293,23 +266,13 @@ namespace NotezAPI.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MainIdeas_LectureId",
-                table: "MainIdeas",
+                name: "IX_Notes_LectureId",
+                table: "Notes",
                 column: "LectureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MainIdeas_UserId",
-                table: "MainIdeas",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Summaries_LectureId1",
-                table: "Summaries",
-                column: "LectureId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Summaries_UserId",
-                table: "Summaries",
+                name: "IX_Notes_UserId",
+                table: "Notes",
                 column: "UserId");
         }
 
@@ -334,10 +297,7 @@ namespace NotezAPI.Migrations
                 name: "LectureUser");
 
             migrationBuilder.DropTable(
-                name: "MainIdeas");
-
-            migrationBuilder.DropTable(
-                name: "Summaries");
+                name: "Notes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

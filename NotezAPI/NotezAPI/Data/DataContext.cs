@@ -16,8 +16,7 @@ namespace NotezAPI.Data
 
         }
         
-        public DbSet<MainIdea> MainIdeas { get; set; }
-        public DbSet<Summary> Summaries { get; set; }
+        public DbSet<Note> Notes { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)

@@ -143,20 +143,23 @@ namespace NotezAPI.Migrations
                     b.ToTable("Lectures");
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.Note.MainIdea", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.Note.Note", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("LectureId")
+                    b.Property<Guid>("LectureId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NoteContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -167,37 +170,7 @@ namespace NotezAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("MainIdeas");
-                });
-
-            modelBuilder.Entity("NotezAPI.Data.Entities.Note.Summary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("LectureId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("LectureId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LectureId1");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Summaries");
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("NotezAPI.Data.Entities.Role.Role", b =>
@@ -362,34 +335,19 @@ namespace NotezAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NotezAPI.Data.Entities.Note.MainIdea", b =>
+            modelBuilder.Entity("NotezAPI.Data.Entities.Note.Note", b =>
                 {
                     b.HasOne("NotezAPI.Data.Entities.Lecture.Lecture", null)
-                        .WithMany("MainIdeas")
-                        .HasForeignKey("LectureId");
+                        .WithMany("Notes")
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("NotezAPI.Data.Entities.User.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("NotezAPI.Data.Entities.Note.Summary", b =>
-                {
-                    b.HasOne("NotezAPI.Data.Entities.Lecture.Lecture", "Lecture")
-                        .WithMany("Summaries")
-                        .HasForeignKey("LectureId1");
-
-                    b.HasOne("NotezAPI.Data.Entities.User.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Lecture");
 
                     b.Navigation("User");
                 });
@@ -415,9 +373,7 @@ namespace NotezAPI.Migrations
 
             modelBuilder.Entity("NotezAPI.Data.Entities.Lecture.Lecture", b =>
                 {
-                    b.Navigation("MainIdeas");
-
-                    b.Navigation("Summaries");
+                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("NotezAPI.Data.Entities.Role.Role", b =>
