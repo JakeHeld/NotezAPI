@@ -40,8 +40,7 @@ namespace NotezAPI.Controllers
 
             return Ok();
         }
-        
-        
+
         [HttpPost("main-idea")]
         [Authorize(Roles = Roles.StudentPlus)]
         public ActionResult CreateMI(CreateNoteDto targetValue)
@@ -62,28 +61,31 @@ namespace NotezAPI.Controllers
 
             return Ok();
         }
-        
-        
-        
+
         [HttpPost("summary")]
         [Authorize(Roles = Roles.StudentPlus)]
         public ActionResult CreateS(CreateNoteDto targetValue)
         {
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var userId = int.Parse(userIdString);
-            
-            var data = dataContext.Set<Note>();
-
-            data.Add(new Note
+            if (userIdString != null)
             {
-                UserId = userId,
-                NoteContent = targetValue.Content,
-                Type = NoteType.Summary,
-                CreationDate = DateTimeOffset.Now,
-                LectureId = targetValue.LectureId
-            });
+                var userId = int.Parse(userIdString);
+            
+                var data = dataContext.Set<Note>();
 
-            return Ok();
+                data.Add(new Note
+                {
+                    UserId = userId,
+                    NoteContent = targetValue.Content,
+                    Type = NoteType.Summary,
+                    CreationDate = DateTimeOffset.Now,
+                    LectureId = targetValue.LectureId
+                });
+
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

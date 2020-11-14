@@ -52,8 +52,5 @@ namespace NotezAPI.Controllers
 
             return Ok();
         }
-
-        
-        
     }
 }

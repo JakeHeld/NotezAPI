@@ -40,6 +40,12 @@ namespace NotezAPI
             
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<DataContext>();
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Notez API", Version = "v1" });
+            });
+
 
         }
 
@@ -55,6 +61,13 @@ namespace NotezAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Notez API V1");
+            });
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
